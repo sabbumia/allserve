@@ -10,6 +10,7 @@ export default function Navbar() {
     { href: '/', label: 'Home' },
     { href: '/wer', label: 'WER' },
     { href: '/process', label: 'Post Process' },
+    { href: '/normalize', label: 'Normalize' },
   ];
 
   const isActive = (path: string) => {
@@ -55,4 +56,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
