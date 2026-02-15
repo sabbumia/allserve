@@ -27,7 +27,7 @@ export default function Navbar() {
             href="/"
             className="text-xl font-bold text-gray-900 hover:opacity-80 transition"
           >
-            YourLogo
+            AllInOne
           </Link>
 
           {/* Navigation Buttons */}
@@ -55,3 +55,4 @@ export default function Navbar() {
     </nav>
   );
 }
+
