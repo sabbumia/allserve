@@ -1,5 +1,5 @@
-import React from 'react';
-import { CheckCircle, XCircle, TrendingDown, FileText } from 'lucide-react';
+import React, { useState } from 'react';
+import { CheckCircle, XCircle, TrendingDown, FileText, Copy, CopyCheck } from 'lucide-react';
 import { ProcessingResult } from './text-processor';
 
 interface ProcessingResultsProps {
@@ -15,6 +15,19 @@ export function ProcessingResults({
   processingStats,
   processedText,
 }: ProcessingResultsProps) {
+  const [copiedOriginal, setCopiedOriginal] = useState(false);
+  const [copiedProcessed, setCopiedProcessed] = useState(false);
+
+  const handleCopy = async (text: string, type: 'original' | 'processed') => {
+    await navigator.clipboard.writeText(text);
+    if (type === 'original') {
+      setCopiedOriginal(true);
+      setTimeout(() => setCopiedOriginal(false), 2000);
+    } else {
+      setCopiedProcessed(true);
+      setTimeout(() => setCopiedProcessed(false), 2000);
+    }
+  };
   return (
     <div className="space-y-6">
       {/* Statistics Cards */}
@@ -117,9 +130,21 @@ export function ProcessingResults({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Original Text */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <XCircle className="w-5 h-5 text-red-500" />
-                <h4 className="font-semibold text-gray-700">Original Text</h4>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <XCircle className="w-5 h-5 text-red-500" />
+                  <h4 className="font-semibold text-gray-700">Original Text</h4>
+                </div>
+                <button
+                  onClick={() => handleCopy(processingResult.original, 'original')}
+                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 text-gray-600 transition-all"
+                >
+                  {copiedOriginal ? (
+                    <><CopyCheck className="w-3.5 h-3.5 text-green-500" /><span className="text-green-600">Copied!</span></>
+                  ) : (
+                    <><Copy className="w-3.5 h-3.5" />Copy</>
+                  )}
+                </button>
               </div>
               <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
                 <pre className="whitespace-pre-wrap text-sm text-gray-800 font-mono max-h-96 overflow-y-auto">
@@ -133,9 +158,21 @@ export function ProcessingResults({
 
             {/* Cleaned Text */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <h4 className="font-semibold text-gray-700">Cleaned Text</h4>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <h4 className="font-semibold text-gray-700">Cleaned Text</h4>
+                </div>
+                <button
+                  onClick={() => handleCopy(processedText || '', 'processed')}
+                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-green-200 hover:border-green-300 bg-white hover:bg-green-50 text-green-700 transition-all"
+                >
+                  {copiedProcessed ? (
+                    <><CopyCheck className="w-3.5 h-3.5 text-green-500" /><span>Copied!</span></>
+                  ) : (
+                    <><Copy className="w-3.5 h-3.5" />Copy</>
+                  )}
+                </button>
               </div>
               <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
                 <pre className="whitespace-pre-wrap text-sm text-gray-800 font-mono max-h-96 overflow-y-auto">
